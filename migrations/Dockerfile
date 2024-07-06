@@ -11,7 +11,7 @@ ENV DB_HOST=postgres_db
 ENV DB_PORT=5432
 ENV DB_USER=postgres
 ENV DB_PASSWORD=postgres
-ENV DB_NAME=package_creator_db
+ENV DB_NAME=food_diary_db
 
 
 COPY . .

@@ -48,13 +48,13 @@ services:
     image: postgres:15.4
     restart: 'on-failure' # контейнер может не отработать с первого раза, если postgres медленно стартует
     entrypoint: ["psql", "postgres://postgres:postgres@postgres_db:5432", 
-      "-c", "CREATE DATABASE \"package_creator_db\" WITH ENCODING = \"UTF8\""]
+      "-c", "CREATE DATABASE \"food_diary_db\" WITH ENCODING = \"UTF8\""]
     depends_on:
       - postgres_db
 
   # Запуск миграции
   migrations:
-    image: img/food-diary-migrations
+    image: img/food_diary_migrations
     restart: 'on-failure' # контейнер может не отработать с первого раза, если postgres медленно стартует
     build:
       context: ./migrations
