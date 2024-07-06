@@ -1,0 +1,7 @@
+# IDE
+.idea
+.vscode
+
+cmd/app/app
+.DS_Store
+/storage

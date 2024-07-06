@@ -1,0 +1,63 @@
+version: "3.8"
+services:
+  # application
+  # Раскоменить если требуется запустить приложение в контейнере.
+  # template:
+  #   container_name: template
+  #   image: img/template
+  #   restart: unless-stopped
+  #   build:
+  #     context: ./
+  #     dockerfile: ./Dockerfile
+  #     network: host
+  #     extra_hosts:
+  #       my.dns.ru: 192.168.0.1
+  #   environment:
+  #     GO_ENVIRONMENT: local
+  #     GATEWAY_HTTP_PORT: 8080
+  #     GATEWAY_GRPC_PORT: 8090
+  #   ports:
+  #     - "8001:8080"
+  #     - "9001:8090"
+  #   depends_on:
+  #     - postgres_db
+  #     - db_creator
+  #     - nats
+
+  # Запуск инфраструктуры для работы приложения
+  # infra
+  # nats:
+  #   container_name: nats
+  #   image: nats:2.9.21
+  #   command: -js
+  #   restart: unless-stopped
+  #   ports:
+  #     - 4222:4222
+
+  # Запуск БД
+  postgres_db:
+    image: postgres:15.4
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5445:5432
+      
+  # Создание БД для миграции
+  db_creator:
+    image: postgres:15.4
+    restart: 'on-failure' # контейнер может не отработать с первого раза, если postgres медленно стартует
+    entrypoint: ["psql", "postgres://postgres:postgres@postgres_db:5432", 
+      "-c", "CREATE DATABASE \"package_creator_db\" WITH ENCODING = \"UTF8\""]
+    depends_on:
+      - postgres_db
+
+  # Запуск миграции
+  migrations:
+    image: img/food-diary-migrations
+    restart: 'on-failure' # контейнер может не отработать с первого раза, если postgres медленно стартует
+    build:
+      context: ./migrations
+      dockerfile: ./Dockerfile
+    depends_on:
+      - db_creator
