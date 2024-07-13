@@ -1,0 +1,170 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Package Creator API",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "PackageCreator"
+    }
+  ],
+  "basePath": "/package-creator",
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/create": {
+      "post": {
+        "operationId": "PackageCreator_CreatePackage",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/package_creatorCreatePackageResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/package_creatorCreatePackageRequest"
+            }
+          }
+        ],
+        "tags": [
+          "PackageCreator"
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "PackageCreator_CheckHealth",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "PackageCreator"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "package_creatorCreatePackageRequest": {
+      "type": "object",
+      "properties": {
+        "PackageType": {
+          "type": "string",
+          "description": "Тип пакета."
+        },
+        "PackageName": {
+          "type": "string",
+          "description": "Наименование пакета."
+        },
+        "DestinationURL": {
+          "type": "string",
+          "description": "URL для отправки."
+        },
+        "ReceiverIsHub": {
+          "type": "boolean",
+          "description": "Получатель является Хаб."
+        },
+        "ReceiverOperatorID": {
+          "type": "string",
+          "description": "Код оператора получателя."
+        },
+        "SenderOperatorID": {
+          "type": "string",
+          "description": "Код оператора отправителя."
+        },
+        "Description": {
+          "type": "string",
+          "format": "byte",
+          "description": "Описание пакета в формате JSON.",
+          "title": "TODO не знаю какой тип тут лучше выбрать. bytes \\ string?"
+        }
+      }
+    },
+    "package_creatorCreatePackageResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "title": "true - задача на создание пакета поставлена, false - не удалось поставить задачу на создание пакета"
+        },
+        "errText": {
+          "type": "string",
+          "title": "Описание ошибки"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "ApiKeyAuth": {
+      "type": "apiKey",
+      "name": "authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ]
+}

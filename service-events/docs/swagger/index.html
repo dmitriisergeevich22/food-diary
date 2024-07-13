@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Swagger UI</title>
+  <link rel="stylesheet" type="text/css" href="/package-creator/swagger/swagger-ui.css">
+  <link rel="icon" type="image/png" href="/package-creator/swagger/favicon-32x32.png" sizes="32x32">
+  <script src="/package-creator/swagger/swagger-ui-bundle.js"></script>
+  <script src="/package-creator/swagger/swagger-ui-standalone-preset.js"></script>
+</head>
+<body>
+<div id="swagger-ui"></div>
+<script>
+  window.onload = function() {
+    const ui = SwaggerUIBundle({
+      urls: [
+        { url: "/package-creator/swagger/api.swagger.json", name: "Package Creator API V1" },
+        // Добавьте дополнительные файлы API здесь
+      ],
+      dom_id: "#swagger-ui",
+      deepLinking: true,
+      presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIStandalonePreset
+      ],
+      plugins: [
+        SwaggerUIBundle.plugins.DownloadUrl
+      ],
+      layout: "StandaloneLayout"
+    });
+
+    window.ui = ui;
+  };
+</script>
+</body>
+</html>
